@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karine Studio - Ganhe um Brinde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(160deg, #fff5f8 0%, #ffe4ee 45%, #ffd3e4 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-x: hidden;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+  }
+
+  /* ---------- flores decorativas flutuando ---------- */
+  .petal {
+    position: fixed;
+    top: -40px;
+    font-size: 22px;
+    color: #f6a8c7;
+    opacity: 0.8;
+    animation: fall linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ---------- TELA INICIAL ---------- */
+  .screen {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .logo-mark {
+    font-family: 'Great Vibes', cursive;
+    font-size: 52px;
+    color: #c94f7c;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(201,79,124,0.25);
+  }
+  .logo-sub {
+    letter-spacing: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #b95c82;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .flower-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 22px 0;
+    color: #f2a8c7;
+  }
+  .flower-divider .line {
+    height: 1px;
+    width: 46px;
+    background: linear-gradient(90deg, transparent, #f2a8c7, transparent);
+  }
+  .flower-divider svg { width: 20px; height: 20px; }
+
+  .gift-card {
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 40px 28px 34px;
+    box-shadow: 0 20px 45px rgba(201,79,124,0.18);
+    border: 1px solid #ffe0ec;
+    position: relative;
+    overflow: hidden;
+  }
+  .gift-card::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, #ffe6f0 0%, transparent 70%);
+  }
+
+  .gift-emoji-box {
+    width: 92px; height: 92px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ffd6e6, #ffb8d3);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 24px rgba(217,90,138,0.35);
+  }
+  .gift-emoji-box svg { width: 46px; height: 46px; }
+
+  .gift-title {
+    font-size: 21px;
+    font-weight: 600;
+    color: #7a2e49;
+    margin-bottom: 6px;
+  }
+  .gift-text {
+    font-size: 14px;
+    color: #a5647d;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+
+  .btn-play {
+    width: 100%;
+    border: none;
+    padding: 16px 20px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #e8659a, #d6437e);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(214,67,126,0.4);
+    transition: transform .15s ease, box-shadow .15s ease;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-play:active { transform: scale(0.97); }
+  .btn-play:hover { box-shadow: 0 14px 28px rgba(214,67,126,0.5); }
+
+  .footer-note {
+    margin-top: 18px;
+    font-size: 11px;
+    color: #c391a7;
+  }
+
+  /* ---------- ANIMACAO DE SORTEIO ---------- */
+  .drawing .gift-emoji-box {
+    animation: shake 0.5s ease-in-out infinite;
+  }
+  @keyframes shake {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-8deg) scale(1.03); }
+    75% { transform: rotate(8deg) scale(1.03); }
+  }
+
+  /* ---------- TELA DE RESULTADO ---------- */
+  .result-screen { display: none; }
+  .result-screen.show { display: block; animation: pop .5s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes pop {
+    0% { opacity: 0; transform: scale(0.85) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .prize-card {
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 0;
+    box-shadow: 0 20px 45px rgba(201,79,124,0.2);
+    overflow: hidden;
+    border: 1px solid #ffe0ec;
+    position: relative;
+  }
+
+  .prize-header {
+    background: linear-gradient(135deg, #ffdcea, #ffc2dc);
+    padding: 30px 20px 60px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+  .prize-header .corner-flower { position: absolute; width: 46px; height: 46px; opacity: 0.55; }
+  .prize-header .cf-tl { top: 10px; left: 10px; }
+  .prize-header .cf-tr { top: 10px; right: 10px; transform: scaleX(-1); }
+
+  .prize-header .crown-icon { width: 40px; height: 40px; margin-bottom: 10px; }
+  .prize-header .congrats {
+    font-family: 'Great Vibes', cursive;
+    font-size: 40px;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(190,60,105,0.35);
+  }
+  .prize-header .congrats-sub {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #8a3457;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .prize-body {
+    background: #fff;
+    margin-top: -34px;
+    border-radius: 26px 26px 0 0;
+    padding: 34px 26px 30px;
+    text-align: center;
+    position: relative;
+  }
+
+  .prize-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff1f6;
+    color: #c94f7c;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    border: 1px solid #ffd6e6;
+  }
+  .prize-badge svg { width: 14px; height: 14px; }
+
+  .prize-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #7a2e49;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    padding: 0 6px;
+  }
+  .prize-discount {
+    font-size: 44px;
+    font-weight: 700;
+    color: #d6437e;
+    line-height: 1;
+    margin: 10px 0 4px;
+  }
+  .prize-discount span { font-size: 20px; font-weight: 600; }
+
+  .prize-desc {
+    font-size: 13px;
+    color: #a5647d;
+    line-height: 1.6;
+    margin: 10px auto 22px;
+    max-width: 280px;
+  }
+
+  .prize-code {
+    border: 1.5px dashed #f2a8c7;
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #b95c82;
+    background: #fffafc;
+    margin-bottom: 22px;
+  }
+  .prize-code b { color: #7a2e49; letter-spacing: 1px; }
+
+  .studio-signature {
+    font-family: 'Great Vibes', cursive;
+    font-size: 30px;
+    color: #d6437e;
+    margin-bottom: 2px;
+  }
+  .studio-tag {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c391a7;
+    margin-bottom: 20px;
+  }
+
+  .flowers-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    color: #f6b9d1;
+  }
+  .flowers-row svg { width: 22px; height: 22px; }
+
+  .btn-save {
+    width: 100%;
+    border: none;
+    padding: 15px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #e8659a, #d6437e);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(214,67,126,0.35);
+    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-save:active { transform: scale(0.97); }
+
+  .btn-whatsapp {
+    width: 100%;
+    border: 1.5px solid #e8659a;
+    padding: 14px;
+    border-radius: 50px;
+    background: #fff;
+    color: #d6437e;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  .save-hint {
+    text-align: center;
+    font-size: 11px;
+    color: #c391a7;
+    margin-top: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TELA INICIAL -->
+  <div class="screen" id="startScreen">
+    <div class="logo-mark">Karine Studio</div>
+    <div class="logo-sub">Sorteio exclusivo</div>
+
+    <div class="flower-divider">
+      <span class="line"></span>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C9 2 8 5 9.5 7C7 6 4 7.5 4 10.5C4 13 6.5 14 9 13.5C7.5 15.5 8 18.5 11 19.5C11 17 11.5 15 12 13.5C12.5 15 13 17 13 19.5C16 18.5 16.5 15.5 15 13.5C17.5 14 20 13 20 10.5C20 7.5 17 6 14.5 7C16 5 15 2 12 2Z" fill="#f2a8c7"/></svg>
+      <span class="line"></span>
+    </div>
+
+    <div class="gift-card" id="giftCard">
+      <div class="gift-emoji-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c94f7c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="8" width="18" height="13" rx="1"></rect>
+          <path d="M12 8v13"></path>
+          <path d="M3 12h18"></path>
+          <path d="M12 8c-1.5 0-3-1-3-2.5S10.5 3 12 3c0 0 0 2.5 0 5z"></path>
+          <path d="M12 8c1.5 0 3-1 3-2.5S13.5 3 12 3c0 0 0 2.5 0 5z"></path>
+        </svg>
+      </div>
+      <div class="gift-title">Você foi sorteada!</div>
+      <div class="gift-text">Clique no botão abaixo e descubra<br>o presente especial que separamos<br>para você.</div>
+      <button class="btn-play" id="playBtn" onclick="revealPrize()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M20 12v9H4v-9M22 7H2v5h20V7ZM12 22V7M12 7C10.5 7 8 6 8 4a2 2 0 1 1 4 0v3ZM12 7c1.5 0 4-1 4-3a2 2 0 1 0-4 0v3Z" stroke="#fff" stroke-width="1.4" fill="none" stroke-linejoin="round"/></svg>
+        Clique aqui e ganhe um brinde
+      </button>
+    </div>
+
+    <div class="footer-note">Promoção exclusiva para clientes Karine Studio</div>
+  </div>
+
+  <!-- TELA DE RESULTADO -->
+  <div class="result-screen" id="resultScreen">
+    <div class="prize-card" id="prizeCardCapture">
+
+      <div class="prize-header">
+        <svg class="corner-flower cf-tl" viewBox="0 0 24 24" fill="#ffffff" opacity="0.6"><path d="M12 2C9 2 8 5 9.5 7C7 6 4 7.5 4 10.5C4 13 6.5 14 9 13.5C7.5 15.5 8 18.5 11 19.5C11 17 11.5 15 12 13.5C12.5 15 13 17 13 19.5C16 18.5 16.5 15.5 15 13.5C17.5 14 20 13 20 10.5C20 7.5 17 6 14.5 7C16 5 15 2 12 2Z"/></svg>
+        <svg class="corner-flower cf-tr" viewBox="0 0 24 24" fill="#ffffff" opacity="0.6"><path d="M12 2C9 2 8 5 9.5 7C7 6 4 7.5 4 10.5C4 13 6.5 14 9 13.5C7.5 15.5 8 18.5 11 19.5C11 17 11.5 15 12 13.5C12.5 15 13 17 13 19.5C16 18.5 16.5 15.5 15 13.5C17.5 14 20 13 20 10.5C20 7.5 17 6 14.5 7C16 5 15 2 12 2Z"/></svg>
+
+        <svg class="crown-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8l4 4 5-7 5 7 4-4-2 10H5L3 8z"></path>
+        </svg>
+        <div class="congrats">Parabéns!</div>
+        <div class="congrats-sub">Você ganhou um brinde</div>
+      </div>
+
+      <div class="prize-body">
+        <div class="prize-badge">
+          <svg viewBox="0 0 24 24" fill="#c94f7c"><path d="M12 2l2.9 6.3L21 9l-4.9 4.3L17.5 20 12 16.5 6.5 20l1.4-6.7L3 9l6.1-.7L12 2z"/></svg>
+          Cupom de desconto
+        </div>
+
+        <div class="prize-name" id="prizeName">Design de Sobrancelha</div>
+        <div class="prize-discount">5<span>% OFF</span></div>
+
+        <div class="prize-desc">Apresente esta tela no dia do seu atendimento para garantir o seu desconto.</div>
+
+        <div class="prize-code">Válido para: <b id="prizeCodeText">Design de Sobrancelha</b></div>
+
+        <div class="studio-signature">Karine Studio</div>
+        <div class="studio-tag">@karine_marcal_studio</div>
+
+        <div class="flowers-row">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9 2 8 5 9.5 7C7 6 4 7.5 4 10.5C4 13 6.5 14 9 13.5C7.5 15.5 8 18.5 11 19.5C11 17 11.5 15 12 13.5C12.5 15 13 17 13 19.5C16 18.5 16.5 15.5 15 13.5C17.5 14 20 13 20 10.5C20 7.5 17 6 14.5 7C16 5 15 2 12 2Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3L21 9l-4.9 4.3L17.5 20 12 16.5 6.5 20l1.4-6.7L3 9l6.1-.7L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9 2 8 5 9.5 7C7 6 4 7.5 4 10.5C4 13 6.5 14 9 13.5C7.5 15.5 8 18.5 11 19.5C11 17 11.5 15 12 13.5C12.5 15 13 17 13 19.5C16 18.5 16.5 15.5 15 13.5C17.5 14 20 13 20 10.5C20 7.5 17 6 14.5 7C16 5 15 2 12 2Z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-save" id="saveBtn" onclick="saveImage()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      Salvar imagem do prêmio
+    </button>
+
+    <a class="btn-whatsapp" href="https://wa.me/554399682933?text=Ol%C3%A1!%20Ganhei%20um%20brinde%20no%20sorteio%20do%20Karine%20Studio%20e%20quero%20agendar!" style="text-decoration:none;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="#d6437e"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.6 8 9.4 7.5c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.8 3.6 13.4 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.4-8.4 8.4z"/></svg>
+      Chamar no WhatsApp e agendar
+    </a>
+
+    <div class="save-hint">A imagem gerada é a sua prova do brinde. Guarde para apresentar no salão.</div>
+  </div>
+
+</div>
+
+<script>
+  // pétalas caindo pela tela
+  const flowers = ['✿','❀','✽'];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (14 + Math.random() * 14) + 'px';
+    p.style.animationDuration = (7 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    document.body.appendChild(p);
+  }
+
+  // premios possiveis (cliente nao sabe de antemao quais sao as opcoes)
+  const prizes = [
+    { name: 'Design de Sobrancelha', code: 'Design de Sobrancelha' }
+  ];
+
+  function revealPrize() {
+    const card = document.getElementById('giftCard');
+    const btn = document.getElementById('playBtn');
+    card.classList.add('drawing');
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    btn.textContent = 'Sorteando...';
+
+    setTimeout(() => {
+      const chosen = prizes[Math.floor(Math.random() * prizes.length)];
+      document.getElementById('prizeName').textContent = chosen.name;
+      document.getElementById('prizeCodeText').textContent = chosen.code;
+
+      document.getElementById('startScreen').style.display = 'none';
+      const result = document.getElementById('resultScreen');
+      result.classList.add('show');
+    }, 1400);
+  }
+
+  function saveImage() {
+    const el = document.getElementById('prizeCardCapture');
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.textContent = 'Gerando imagem...';
+    html2canvas(el, { backgroundColor: '#ffffff', scale: 3 }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'karine-studio-premio.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      saveBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Salvar imagem do prêmio';
+    });
+  }
+</script>
+
+</body>
+</html>
